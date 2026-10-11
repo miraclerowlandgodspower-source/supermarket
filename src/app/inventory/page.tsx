@@ -14,6 +14,7 @@ type InventoryReadRecord = {
   stock: number;
   minimumStock: number;
   unit: string;
+  imageUrl?: string;
 };
 
 export const dynamic = "force-dynamic";
@@ -42,6 +43,7 @@ export default async function InventoryPage() {
     stock: product.stock,
     minimumStock: product.minimumStock,
     unit: product.unit,
+    imageUrl: product.imageUrl,
   }));
 
   return <InventoryManager canViewCost={user.role === "owner" || user.role === "manager"} initialProducts={products} />;
