@@ -12,6 +12,9 @@ export const createProductSchema = z.object({
   stock: z.number().int().nonnegative().max(1_000_000),
   minimumStock: z.number().int().nonnegative().max(1_000_000).default(5),
   unit: z.enum(PRODUCT_UNITS).default("unit"),
+  unitSize: z.number().finite().positive().max(1000000).optional().default(1),
+  unitSizeLabel: z.enum(["unit","piece","g","kg","ml","litre","bottle","sachet"]).optional().default("unit"),
+  unitsPerPack: z.number().int().positive().max(1000000).optional().default(1),
   imageUrl: z.union([z.literal(""), z.url({ protocol: /^https$/ })]).optional().default(""),
 });
 
