@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BriefcaseBusiness, Boxes, ChartColumnIncreasing, CircleAlert, CreditCard, LayoutDashboard, LogOut, Package, Receipt, Search, ShoppingCart, Store, TrendingUp, Users, Wallet } from "lucide-react";
+import { Building2, Truck, ClipboardList, ReceiptText, BriefcaseBusiness, Boxes, ChartColumnIncreasing, CircleAlert, CreditCard, LayoutDashboard, LogOut, Package, Receipt, Search, ShoppingCart, Store, TrendingUp, Users, Wallet } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/product";
@@ -63,6 +63,11 @@ export default async function DashboardPage() {
     { href: "/pos", label: "Point of Sale", icon: ShoppingCart, show: true },
     { href: "/inventory", label: "Inventory", icon: Boxes, show: canSeeCosts },
     { href: "/employees", label: "Employees", icon: BriefcaseBusiness, show: user.role === "owner" },
+    { href: "/purchases", label: "Purchases", icon: ClipboardList, show: canSeeCosts },
+    { href: "/customers", label: "Customers", icon: Users, show: canSeeCosts },
+    { href: "/suppliers", label: "Suppliers", icon: Truck, show: canSeeCosts },
+    { href: "/expenses", label: "Expenses", icon: ReceiptText, show: canSeeCosts },
+    { href: "/branches", label: "Branches", icon: Building2, show: user.role === "owner" },
   ];
   return (
     <div className="market-shell">
@@ -72,10 +77,7 @@ export default async function DashboardPage() {
         <nav aria-label="Main navigation">
           {nav.filter(n => n.show).map(n => <Link key={n.href} href={n.href} className={n.href === "/dashboard" ? "market-nav-link active" : "market-nav-link"}><n.icon size={17}/>{n.label}</Link>)}
         </nav>
-        <div className="market-nav-label market-nav-label-spaced">COMING SOON</div>
-        <div className="market-nav-disabled"><Users size={17}/> Customers</div>
-        <div className="market-nav-disabled"><ChartColumnIncreasing size={17}/> Reports</div>
-        <div className="market-nav-disabled"><CreditCard size={17}/> Expenses</div>
+
         <div className="market-sidebar-bottom"><div className="market-sidebar-help">Built for Nigerian supermarkets<br/><strong>Secure · MongoDB connected</strong></div><form action="/api/auth/logout" method="post"><button type="submit" className="market-signout"><LogOut size={17}/> Sign out</button></form></div>
       </aside>
       <main className="market-main">
