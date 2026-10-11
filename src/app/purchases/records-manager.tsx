@@ -1,7 +1,7 @@
 "use client";
 import {useEffect,useState,type FormEvent} from "react";
-type Entry={id:string;supplierName:string;reference:string;description:string;amountNgn:number;status:string};
-const fields=["supplierName","reference","description","amountNgn","status"] as const;
+type Entry = Record<string, string | number> & { id: string };
+const fields=["supplierName","reference","description","amountNgn","status"];
 const labels:Record<string,string>={supplierName:"Supplier name",amountNgn:"Amount (₦)",date:"Date"};
 export function RecordsManager(){
  const [items,setItems]=useState<Entry[]>([]);const [message,setMessage]=useState("");const [saving,setSaving]=useState(false);
