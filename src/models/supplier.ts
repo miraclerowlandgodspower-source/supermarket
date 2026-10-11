@@ -1,0 +1,3 @@
+import { model,models,Schema } from "mongoose";
+const schema=new Schema({name:{type:String,required:true,trim:true,maxlength:120},email:{type:String,trim:true,lowercase:true,maxlength:254,default:""},phone:{type:String,trim:true,maxlength:30,default:""},address:{type:String,trim:true,maxlength:300,default:""},active:{type:Boolean,default:true}}, {timestamps:true});
+export const Supplier=models.Supplier??model("Supplier",schema);
