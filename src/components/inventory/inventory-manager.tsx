@@ -53,6 +53,7 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
       sellingPriceNgn: Number(data.get("sellingPriceNgn")), stock: Number(data.get("stock")),
       minimumStock: Number(data.get("minimumStock")), unit: data.get("unit"),
       imageUrl: data.get("imageUrl"), description: data.get("description"), barcode: data.get("barcode"),
+      unitSize: Number(data.get("unitSize") || 1), unitSizeLabel: data.get("unitSizeLabel"), unitsPerPack: Number(data.get("unitsPerPack") || 1),
       ...(canViewCost ? {costPriceNgn: Number(data.get("costPriceNgn") || 0)} : {}),
     };
     try {
@@ -121,7 +122,10 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
               <label>Product image HTTPS URL<input name="imageUrl" type="url" placeholder="https://example.com/product.jpg" /></label>
               <label>Description<input name="description" maxLength={2000} placeholder="Size, brand and packaging" /></label>
               {canViewCost && <label>Cost price (₦)<input name="costPriceNgn" type="number" min="0" step=".01" defaultValue="0" /></label>}
-              <label>Unit<select name="unit" defaultValue="unit"><option value="unit">Unit</option><option value="kg">Kilogram</option><option value="g">Gram</option><option value="litre">Litre</option><option value="pack">Pack</option><option value="carton">Carton</option><option value="bottle">Bottle</option><option value="bag">Bag</option></select></label>
+              <label>Unit size<input name="unitSize" type="number" min="0.001" step="any" defaultValue="1" required /></label>
+              <label>Measured in<select name="unitSizeLabel" defaultValue="unit"><option value="unit">Unit</option><option value="piece">Piece</option><option value="g">Gram</option><option value="kg">Kilogram</option><option value="ml">Millilitre</option><option value="litre">Litre</option><option value="bottle">Bottle</option><option value="sachet">Sachet</option></select></label>
+              <label>Items per pack/carton<input name="unitsPerPack" type="number" min="1" step="1" defaultValue="1" required /></label>
+              <label>Unit<select name="unit" defaultValue="unit"><option value="unit">Unit</option><option value="kg">Kilogram</option><option value="g">Gram</option><option value="litre">Litre</option><option value="ml">Millilitre</option><option value="piece">Piece</option><option value="dozen">Dozen</option><option value="sachet">Sachet</option><option value="box">Box</option><option value="pack">Pack</option><option value="carton">Carton</option><option value="bottle">Bottle</option><option value="bag">Bag</option></select></label>
             </div>
             <div className="form-actions"><p role="status">{message}</p><button className="submit-button" type="submit" disabled={pending}>{pending ? "Saving…" : "Add product"}</button></div>
           </form>
