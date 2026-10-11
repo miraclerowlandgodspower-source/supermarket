@@ -10,6 +10,8 @@ const userSchema = new Schema({
   passwordHash: { type: String, required: true, select: false },
   role: { type: String, enum: USER_ROLES, required: true, default: "cashier" },
   active: { type: Boolean, default: true, required: true },
+  monthlySalaryKobo: { type: Number, min: 0, default: 0, validate: Number.isSafeInteger },
+  salaryPaidThrough: { type: String, default: "", match: /^$|^\\d{4}-(0[1-9]|1[0-2])$/ },
 }, { timestamps: true });
 
 export const User = models.User ?? model("User", userSchema);
