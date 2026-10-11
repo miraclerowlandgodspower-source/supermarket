@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { ArrowLeft, Minus, Plus, Printer, Search, ShoppingBasket, Trash2 } from "lucide-react";
 import Link from "next/link";
 
-type Product = { id: string; name: string; category: string; sku: string; sellingPriceNgn: number; stock: number; unit: string };
+type Product = { id: string; name: string; category: string; sku: string; sellingPriceNgn: number; stock: number; unit: string; imageUrl?: string };
 type CartItem = Product & { quantity: number };
 type Receipt = {
   receiptNumber: string;
@@ -111,11 +111,7 @@ export function PosTerminal({ cashierName }: { cashierName: string }) {
 
   return (
     <main className="pos-page">
-      <header className="dashboard-header no-print">
-        <Link className="brand-lockup" href="/dashboard"><span className="brand-mark"><ShoppingBasket size={21} /></span><span>Marketline<span className="brand-period">.</span></span></Link>
-        <span className="pos-cashier">Cashier · {cashierName}</span>
-        <Link className="logout-button" href="/dashboard"><ArrowLeft size={16} /> Dashboard</Link>
-      </header>
+      
       <section className="pos-content">
         <div className="pos-heading"><div><p className="eyebrow">POINT OF SALE</p><h1>New sale</h1></div><p>Prices and stock are verified at checkout.</p></div>
         <div className="pos-layout">
@@ -123,7 +119,7 @@ export function PosTerminal({ cashierName }: { cashierName: string }) {
             <form className="inventory-search" onSubmit={searchProducts}><Search size={17} aria-hidden="true" /><input aria-label="Search products" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Product name, SKU or barcode" /><button type="submit">Find</button></form>
             <div className="pos-product-grid">
               {products.length ? products.map((product) => <button className="pos-product" type="button" key={product.id} onClick={() => addProduct(product)} disabled={product.stock < 1}>
-                <span className="product-image-placeholder"><ShoppingBasket size={23} /></span><span className="pos-product-name">{product.name}</span><span className="pos-product-meta">{product.stock} {product.unit} available</span><strong>{money.format(product.sellingPriceNgn)}</strong>
+                <span className="product-image-placeholder">{product.imageUrl ? <img src={product.imageUrl} alt="" width={54} height={54} style={{objectFit:"cover",borderRadius:8}}/> : <ShoppingBasket size={23} />}</span><span className="pos-product-name">{product.name}</span><span className="pos-product-meta">{product.stock} {product.unit} available</span><strong>{money.format(product.sellingPriceNgn)}</strong>
               </button>) : <p className="pos-empty">Search for a product to begin.</p>}
             </div>
           </section>
