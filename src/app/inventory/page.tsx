@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { StaffShell } from "@/app/dashboard/staff-shell";
 import { InventoryManager } from "@/components/inventory/inventory-manager";
 import { getCurrentUser } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
@@ -46,8 +47,8 @@ export default async function InventoryPage() {
     imageUrl: product.imageUrl,
   }));
 
-  return <InventoryManager canViewCost={user.role === "owner" || user.role === "manager"} initialProducts={products} />;
+  return <StaffShell name={user.name} role={user.role} active="/inventory"><InventoryManager canViewCost={user.role === "owner" || user.role === "manager"} initialProducts={products} /></StaffShell>;
   } catch {
-    return <main className="inventory-page"><section className="inventory-error" role="alert"><h1>Inventory unavailable</h1><p>Products could not be loaded. Check the MongoDB connection and try again.</p><a href="/inventory">Retry inventory</a></section></main>;
+    return <StaffShell name={user.name} role={user.role} active="/inventory"><main className="inventory-page"><section className="inventory-error" role="alert"><h1>Inventory unavailable</h1><p>Products could not be loaded. Check the MongoDB connection and try again.</p><a href="/inventory">Retry inventory</a></section></main></StaffShell>;
   }
 }
