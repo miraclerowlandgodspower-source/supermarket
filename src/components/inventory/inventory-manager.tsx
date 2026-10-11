@@ -14,6 +14,7 @@ type ProductRow = {
   stock: number;
   minimumStock: number;
   unit: string;
+  imageUrl?: string;
 };
 
 const money = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 2 });
@@ -51,6 +52,8 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
       name: data.get("name"), category: data.get("category"), sku: data.get("sku"),
       sellingPriceNgn: Number(data.get("sellingPriceNgn")), stock: Number(data.get("stock")),
       minimumStock: Number(data.get("minimumStock")), unit: data.get("unit"),
+      imageUrl: data.get("imageUrl"), description: data.get("description"), barcode: data.get("barcode"),
+      ...(canViewCost ? {costPriceNgn: Number(data.get("costPriceNgn") || 0)} : {}),
     };
     try {
       const response = await fetch("/api/products", {
@@ -117,6 +120,10 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
               <label>Selling price (₦)<input name="sellingPriceNgn" type="number" min="0.01" step="0.01" required /></label>
               <label>Opening stock<input name="stock" type="number" min="0" step="1" defaultValue="0" required /></label>
               <label>Low-stock threshold<input name="minimumStock" type="number" min="0" step="1" defaultValue="5" required /></label>
+              <label>Barcode<input name="barcode" maxLength={80} placeholder="Barcode number" /></label>
+              <label>Product image HTTPS URL<input name="imageUrl" type="url" placeholder="https://example.com/product.jpg" /></label>
+              <label>Description<input name="description" maxLength={2000} placeholder="Size, brand and packaging" /></label>
+              {canViewCost && <label>Cost price (₦)<input name="costPriceNgn" type="number" min="0" step=".01" defaultValue="0" /></label>}
               <label>Unit<select name="unit" defaultValue="unit"><option value="unit">Unit</option><option value="kg">Kilogram</option><option value="g">Gram</option><option value="litre">Litre</option><option value="pack">Pack</option><option value="carton">Carton</option><option value="bottle">Bottle</option><option value="bag">Bag</option></select></label>
             </div>
             <div className="form-actions"><p role="status">{message}</p><button className="submit-button" type="submit" disabled={pending}>{pending ? "Saving…" : "Add product"}</button></div>
@@ -138,7 +145,7 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
             <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Selling price</th>{canViewCost && <th>Cost</th>}<th>Stock</th><th>Status</th></tr></thead>
             <tbody>
               {loading ? <tr><td colSpan={canViewCost ? 7 : 6} className="table-state"><LoaderCircle className="spin" size={18} /> Loading products</td></tr> : products.length === 0 ? <tr><td colSpan={canViewCost ? 7 : 6} className="table-state"><div className="inventory-empty"><strong>{message || "No products yet"}</strong><span>{message ? "Check your connection and retry a product search." : "Add your first product to start managing stock."}</span>{!message && <button className="empty-add-button" type="button" onClick={() => productNameInput.current?.focus()}>Add Product</button>}</div></td></tr> : products.map((product) => (
-                <tr key={product.id}><td className="product-name-cell">{product.name}</td><td>{product.sku}</td><td>{product.category}</td><td>{money.format(product.sellingPriceNgn)}</td>{canViewCost && <td>{product.costPriceNgn === undefined ? "—" : money.format(product.costPriceNgn)}</td>}<td>{product.stock} <span className="unit-label">{product.unit}</span></td><td><span className={`stock-status ${product.stock === 0 ? "out" : product.stock <= product.minimumStock ? "low" : "in"}`}>{product.stock === 0 ? "Out of stock" : product.stock <= product.minimumStock ? "Low stock" : "In stock"}</span></td></tr>
+                <tr key={product.id}><td className="product-name-cell"><span style={{display:"inline-flex",alignItems:"center",gap:10}}>{product.imageUrl && <img src={product.imageUrl} alt="" width={40} height={40} style={{objectFit:"cover",borderRadius:7}}/>}{product.name}</span></td><td>{product.sku}</td><td>{product.category}</td><td>{money.format(product.sellingPriceNgn)}</td>{canViewCost && <td>{product.costPriceNgn === undefined ? "—" : money.format(product.costPriceNgn)}</td>}<td>{product.stock} <span className="unit-label">{product.unit}</span></td><td><span className={`stock-status ${product.stock === 0 ? "out" : product.stock <= product.minimumStock ? "low" : "in"}`}>{product.stock === 0 ? "Out of stock" : product.stock <= product.minimumStock ? "Low stock" : "In stock"}</span></td></tr>
               ))}
             </tbody>
           </table>
