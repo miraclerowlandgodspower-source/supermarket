@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Boxes, ChartColumnIncreasing, CircleAlert, CreditCard, LayoutDashboard, LogOut, Package, Receipt, Search, ShoppingCart, Store, TrendingUp, Users, Wallet } from "lucide-react";
+import { BriefcaseBusiness, Boxes, ChartColumnIncreasing, CircleAlert, CreditCard, LayoutDashboard, LogOut, Package, Receipt, Search, ShoppingCart, Store, TrendingUp, Users, Wallet } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/product";
@@ -62,6 +62,7 @@ export default async function DashboardPage() {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, show: true },
     { href: "/pos", label: "Point of Sale", icon: ShoppingCart, show: true },
     { href: "/inventory", label: "Inventory", icon: Boxes, show: canSeeCosts },
+    { href: "/employees", label: "Employees", icon: BriefcaseBusiness, show: user.role === "owner" },
   ];
   return (
     <div className="market-shell">
@@ -85,11 +86,11 @@ export default async function DashboardPage() {
           {sales.length === 1500 && <div className="market-info">Sales trends are based on the latest 1,500 transactions. Historical totals may be incomplete.</div>}
           <div className="market-stat-grid">
             <Metric icon={<ShoppingCart size={23}/>} label="Today's Sales" value={money(sumSales(todaySales))} sub={`${todaySales.length} transactions today`} tone="purple"/>
-            <Metric icon={<TrendingUp size={23}/>} label="This Month's Sales" value={money(sumSales(monthSales))} sub="Current calendar month" tone="green"/>
-            <Metric icon={<Receipt size={23}/>} label="Today's Transactions" value={String(todaySales.length)} sub="Recorded checkouts" tone="orange"/>
+            <Metric icon={<TrendingUp size={23}/>} label="This Month's Sales" value={money(sumSales(monthSales))} sub="Current calendar month" tone="blue"/>
+            <Metric icon={<Receipt size={23}/>} label="Today's Transactions" value={String(todaySales.length)} sub="Recorded checkouts" tone="purple"/>
             <Metric icon={<Package size={23}/>} label="Stock Value" value={canSeeCosts ? stockValuationAvailable ? money(stockValue) : "Not available" : "Restricted"} sub="Based on recorded item costs" tone="blue"/>
-            <Metric icon={<Users size={23}/>} label="Named Customers" value={String(customerNames.size)} sub="From recent sales records" tone="pink"/>
-            <Metric icon={<CircleAlert size={23}/>} label="Low Stock Items" value={String(lowStock.length)} sub="At or below reorder level" tone="cyan"/>
+            <Metric icon={<Users size={23}/>} label="Named Customers" value={String(customerNames.size)} sub="From recent sales records" tone="blue"/>
+            <Metric icon={<CircleAlert size={23}/>} label="Low Stock Items" value={String(lowStock.length)} sub="At or below reorder level" tone="purple"/>
           </div>
           <div className="market-panel-grid">
             <section className="market-panel market-sales-panel"><div className="market-panel-head"><div><h2>Sales Overview</h2><p>Last 7 days · Lagos time</p></div><span className="market-chip">7 DAYS</span></div><div className="market-chart"><div className="market-chart-bars">{daily.map(d => <div key={d.key} className="market-chart-col"><strong>{d.total ? money(d.total) : ""}</strong><div className="market-bar-track"><div className="market-bar" style={{ height: `${Math.max(d.total ? 6 : 0, d.total / peak * 100)}%` }}/></div><span>{d.label}</span></div>)}</div></div></section>
