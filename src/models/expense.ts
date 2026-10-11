@@ -1,0 +1,3 @@
+import {model,models,Schema} from "mongoose";
+const schema=new Schema({description:{type:String,required:true,trim:true,maxlength:300},category:{type:String,required:true,trim:true,maxlength:80},amountKobo:{type:Number,required:true,min:0,validate:Number.isSafeInteger},date:{type:Date,required:true,default:Date.now},createdBy:{type:Schema.Types.ObjectId,ref:"User",required:true}},{timestamps:true});
+export const Expense=models.Expense??model("Expense",schema);
