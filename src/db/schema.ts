@@ -131,3 +131,9 @@ export const inventoryMovements = pgTable("inventory_movements", {
   saleId: uuid("sale_id").references(() => sales.id),
   createdAt: createdAt(),
 }, (t) => [index("inventory_movements_product_idx").on(t.productId), index("inventory_movements_created_idx").on(t.createdAt)]);
+
+export const loginAttempts = pgTable("login_attempts", {
+  key: varchar("key", { length: 128 }).primaryKey(),
+  attempts: integer("attempts").notNull().default(0),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+}, (t) => [index("login_attempts_expiry_idx").on(t.expiresAt)]);
