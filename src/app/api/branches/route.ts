@@ -2,7 +2,7 @@ import { NextResponse,type NextRequest } from "next/server";
 import { z } from "zod";
 import { connectToDatabase } from "@/lib/db";
 import { requireRole,hasTrustedOrigin,AuthorizationError } from "@/lib/permissions";
-import { Branch } from "@/models/branche";
+import { Branch } from "@/models/branch";
 const schema=z.object({name:z.string().trim().min(2).max(120),address:z.string().trim().max(300),phone:z.string().trim().max(30)});
 const fail=(e:unknown)=>e instanceof AuthorizationError?NextResponse.json({error:e.message},{status:e.status}):NextResponse.json({error:"Request could not be completed."},{status:500});
 export async function GET(){
