@@ -98,10 +98,7 @@ export function InventoryManager({ canViewCost, initialProducts }: { canViewCost
 
   return (
     <main className="inventory-page">
-      <header className="dashboard-header">
-        <Link className="brand-lockup" href="/dashboard"><span className="brand-mark"><ShoppingBasket size={21} /></span><span>Marketline<span className="brand-period">.</span></span></Link>
-        <Link className="logout-button" href="/dashboard"><ArrowLeft size={16} /> Dashboard</Link>
-      </header>
+      
       <section className="inventory-content">
         <div className="inventory-heading"><div><p className="eyebrow">CATALOGUE & STOCK</p><h1>Inventory</h1><p>Products are stored in the supermarket database and shared across staff.</p></div><span className="inventory-count">{products.length} shown</span></div>
 
