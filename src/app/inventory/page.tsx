@@ -23,6 +23,7 @@ export default async function InventoryPage() {
   if (!user) redirect("/");
   if (user.role === "cashier") redirect("/access-denied");
 
+  try {
   await connectToDatabase();
   const result = await Product.find({ status: "active" })
     .select(user.role === "owner" || user.role === "manager" ? "+costPriceKobo" : "-costPriceKobo")
@@ -44,4 +45,7 @@ export default async function InventoryPage() {
   }));
 
   return <InventoryManager canViewCost={user.role === "owner" || user.role === "manager"} initialProducts={products} />;
+  } catch {
+    return <main className="inventory-page"><section className="inventory-error" role="alert"><h1>Inventory unavailable</h1><p>Products could not be loaded. Check the MongoDB connection and try again.</p><a href="/inventory">Retry inventory</a></section></main>;
+  }
 }
